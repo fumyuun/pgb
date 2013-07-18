@@ -1,0 +1,7 @@
+.DS_Store
+*.dSYM
+pgb-aal
+pgb-ncurses
+pgb-sdl
+*.gb
+*.bin
