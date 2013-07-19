@@ -39,8 +39,8 @@ typedef struct _gfx_t
     Uint32 black, white;
 #endif
 #ifdef AALIB
-    aal_context *context;
-    aal_palette _pal;
+    aa_context *aal_context;
+    aa_palette aal_pal;
 #endif
 #ifdef FRAMESKIP
     unsigned int fscounter;

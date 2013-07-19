@@ -1,7 +1,7 @@
 FILES=cpu.c gb.c gfx.c main.c mem.c instr.c
 
 CC=/usr/bin/clang
-INCLUDE_DIRS=-L/opt/local/lib -I/opt/local/lib -L/usr/local/lib -I/usr/local
+INCLUDE_DIRS=-L/opt/local/lib -I/opt/local/include -L/usr/local/lib -I/usr/local/include
 GLOBAL_FLAGS=-Wall -Wextra -pedantic -g -std=c99 -fsanitize=address $(INCLUDE_DIRS)
 
 NCURSES_FLAGS=-lncurses -DNCURSES
