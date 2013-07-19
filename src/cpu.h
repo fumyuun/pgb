@@ -88,3 +88,4 @@ int cpu_init(cpu_t *cpu, mem_t *mem, int *run);
 void cpu_tick(cpu_t *cpu);
 
 #endif
+

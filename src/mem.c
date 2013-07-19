@@ -82,3 +82,4 @@ uint8_t *mem_get_ioreg(mem_t *mem, uint16_t addr)
 {
     return mem->iram + addr;
 }
+

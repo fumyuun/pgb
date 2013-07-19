@@ -9,3 +9,4 @@ int cpu_init(cpu_t *cpu, mem_t *mem, int *run)
     cpu->cycles = 0;
     return 0;
 }
+

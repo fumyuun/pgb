@@ -12,17 +12,17 @@
 #define FRAMESKIP   4
 
 #ifdef NCURSES
-    #ifdef __CYGWIN__
-        #include <ncurses/ncurses.h>
-    #else
-        #include <curses.h>
-    #endif
+    #include <curses.h>
 #endif
 #ifdef SDL
     #include <SDL/SDL.h>
 #endif
 #ifdef AALIB
-    #include <aalib.h>
+	#ifdef __APPLE__
+    	#include <aalib.h>
+	#else
+		#error Currently aalib is only supported on OS-X. Sorry :(
+	#endif
 #endif
 
 #include "mem.h"
@@ -39,8 +39,8 @@ typedef struct _gfx_t
     Uint32 black, white;
 #endif
 #ifdef AALIB
-    aa_context *aal_context;
-    aa_palette aal_pal;
+    aal_context *context;
+    aal_palette _pal;
 #endif
 #ifdef FRAMESKIP
     unsigned int fscounter;
@@ -63,3 +63,4 @@ void gfx_quit(gfx_t *gfx);
 inline void sdl_putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 #endif
 #endif
+

@@ -20,3 +20,4 @@ int gb_init(gb_t *gb, char *fname);
 void gb_run(gb_t *gb);
 
 #endif
+

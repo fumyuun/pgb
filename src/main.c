@@ -19,8 +19,6 @@ int main(int argc, char **argv)
     
     gb_run(&gb);
     
-    while(1)
-        sleep(1);
-    
     return 0;
 }
+

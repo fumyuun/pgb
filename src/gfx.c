@@ -188,3 +188,4 @@ void gfx_quit(gfx_t *gfx)
     aa_close(gfx->aal_context);
 #endif
 }
+

@@ -285,3 +285,4 @@ void print_dbg(cpu_t *cpu, uint16_t pc, uint8_t instr)
             fprintf(stderr, " 0x%X  ", mem_read(cpu->mem, i));
     }
 }
+

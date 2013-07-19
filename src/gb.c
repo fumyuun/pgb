@@ -13,15 +13,12 @@ int gb_init(gb_t *gb, char *fname)
 /* Run the gameboy until it terminates */
 void gb_run(gb_t *gb)
 {
-    struct timespec tick;
     gb->run = 1;
-    tick.tv_sec = 0;
-    tick.tv_nsec = 238;     /* 4.194304 MHz ~ 238 ns*/
     while(gb->run)
     {
         cpu_tick(&gb->cpu);
         gfx_tick(&gb->gfx);
-        //nanosleep(&tick, &tick);
     }
     gfx_quit(&gb->gfx);
 }
+
