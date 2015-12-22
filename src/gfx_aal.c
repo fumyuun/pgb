@@ -40,15 +40,15 @@ void gfx_tick(gfx_t *gfx)
             gfx->framecounter++;
         }
         gfx->vscounter = 0;
+        if((*gfx->lcdc & 0x80) == 0x80) {
+            gfx_update(gfx);
+        }
     }
 #ifdef FRAMESKIP
     if(gfx->fscounter++ < FRAMESKIP)
         return;
     gfx->fscounter = 0;
 #endif
-    if((*gfx->lcdc & 0x80) == 0x80) {
-        gfx_update(gfx);
-    }
 
 }
 

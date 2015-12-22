@@ -36,6 +36,7 @@ int gfx_init(gfx_t *gfx, mem_t *mem, int *run)
     gfx->scx = mem_get_ioreg(gfx->mem, 0xFF43);
     gfx->ly = mem_get_ioreg(gfx->mem, 0xFF44);
     gfx->vscounter = 0;
+    gfx->sleepcounter = 0;
 
     *gfx->ly = 0x90;
 
@@ -44,6 +45,7 @@ int gfx_init(gfx_t *gfx, mem_t *mem, int *run)
 
 void gfx_tick(gfx_t *gfx)
 {
+    SDL_Event event;
     /* Vsync period is Every 17 ms, while the CPU tick every 238 ns.
        17ms / 238ns = 71429 */
     if(gfx->vscounter++ > 71429 / 0x100) {
@@ -53,26 +55,24 @@ void gfx_tick(gfx_t *gfx)
             gfx->framecounter++;
         }
         gfx->vscounter = 0;
+        if((*gfx->lcdc & 0x80) == 0x80) {
+            gfx_update(gfx);
+        }
     }
-#ifdef FRAMESKIP
-    if(gfx->fscounter++ < FRAMESKIP)
-        return;
-    gfx->fscounter = 0;
-#endif
-    if((*gfx->lcdc & 0x80) == 0x80) {
-        gfx_update(gfx);
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            *(gfx->run) = 0;
+        }
     }
-
 }
 
 void gfx_update(gfx_t *gfx)
 {
-    SDL_Event event;
     int px, py, tx, i;
     uint8_t *t, pl1, pl2, pl;
     if(*gfx->ly < 0x90) {
         py = *gfx->ly;
-        t = gfx->mem->iram + 0x9800 + 32*(py/8 + *gfx->scy) + *gfx->scx/64;
+        t = gfx->mem->iram + 0x9800 + 32*(py/8);
         for(tx = 0; tx < 20; ++tx) {
             pl1 = gfx->mem->iram[0x8000 + 16 * *t + 2*(py % 8)];
             pl2 = gfx->mem->iram[0x8000 + 16 * *t + 2*(py % 8) + 1];
@@ -90,12 +90,15 @@ void gfx_update(gfx_t *gfx)
         }
     }
     if(*gfx->ly == 0x90) {
+        #ifdef FRAMESKIP
+            if(gfx->fscounter++ < FRAMESKIP) {
+                return;
+            }
+            gfx->fscounter = 0;
+        #endif
         SDL_RenderPresent(gfx->sdl_renderer);
-    }
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            *(gfx->run) = 0;
-        }
+        //printf("FPS: %lu\n", 1000 / (SDL_GetTicks() - gfx->last_frame));
+        //gfx->last_frame = SDL_GetTicks();
     }
 }
 

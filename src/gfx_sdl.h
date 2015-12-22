@@ -19,6 +19,7 @@ typedef struct _gfx_t
 #ifdef FRAMESKIP
     unsigned int fscounter;
 #endif
+    unsigned int sleepcounter;
     unsigned int vscounter;
     unsigned long framecounter;
     uint8_t *lcdc;
