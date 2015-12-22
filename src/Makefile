@@ -5,7 +5,7 @@ INCLUDE_DIRS=-L/opt/local/lib -I/opt/local/include -L/usr/local/lib -I/usr/local
 GLOBAL_FLAGS=-Wall -Wextra -pedantic -g -std=c99 -fsanitize=address $(INCLUDE_DIRS)
 
 NCURSES_FLAGS=-lncurses -DNCURSES
-SDL_FLAGS=`sdl-config --cflags --libs` -DSDL
+SDL_FLAGS=`sdl2-config --cflags --libs` -DSDL
 AAL_FLAGS=-laa -DAALIB
 
 all:	../pgb-ncurses ../pgb-sdl ../pgb-aal
@@ -17,7 +17,7 @@ all:	../pgb-ncurses ../pgb-sdl ../pgb-aal
 	$(CC) -o ../pgb-sdl $(FILES) $(SDL_FLAGS) $(GLOBAL_FLAGS)
 
 ../pgb-aal:	$(FILES)
-	$(CC) -o ../pgb-aal $(FILES) $(AAL_FLAGS) $(GLOBAL_FLAGS)
+	$(CC) -o ../pgb-aal $(FILES) -lncurses $(AAL_FLAGS) $(GLOBAL_FLAGS)
 
 clean:
 	rm -f ../pgb-ncurses ../pgb-sdl ../pgb-aal
