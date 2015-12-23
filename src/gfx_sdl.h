@@ -3,7 +3,7 @@
 
 #define SCREEN_H    144
 #define SCREEN_W    160
-//#define FRAMESKIP   4
+#define FRAMESKIP   4
 
 #include <SDL.h>
 

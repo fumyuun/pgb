@@ -62,13 +62,14 @@ void gfx_tick(gfx_t *gfx)
         if((*gfx->lcdc & 0x80) == 0x80) {
             gfx_update(gfx);
         }
-    }
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT || (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE)) {
-            *gfx->run = 0;
-        }
-        if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_d) {
-            debug_toggle_tilemap();
+
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT || (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE)) {
+                *gfx->run = 0;
+            }
+            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_d) {
+                debug_toggle_tilemap();
+            }
         }
     }
 }
@@ -77,6 +78,18 @@ void gfx_update(gfx_t *gfx)
 {
     int px, py, tx, i;
     uint8_t *t, pl1, pl2, pl;
+    #ifdef FRAMESKIP
+    if (gfx->fscounter < FRAMESKIP) {
+        if (*gfx->ly < 0x90) {
+            // drawing a skipped frame, skip
+            return;
+        } else {
+            // finished drawing a skipped frame, increase counter
+            gfx->fscounter++;
+            return;
+        }
+    }
+    #endif
     if(*gfx->ly < 0x90) {
         py = *gfx->ly;
         t = gfx->mem->iram + 0x9800 + 32*(py/8);
@@ -97,13 +110,10 @@ void gfx_update(gfx_t *gfx)
         }
     }
     if(*gfx->ly == 0x90) {
-        #ifdef FRAMESKIP
-            if(gfx->fscounter++ < FRAMESKIP) {
-                return;
-            }
-            gfx->fscounter = 0;
-        #endif
         SDL_RenderPresent(gfx->sdl_renderer);
+        #ifdef FRAMESKIP
+        gfx->fscounter = 0;
+        #endif
     }
 }
 
