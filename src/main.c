@@ -9,16 +9,18 @@ int main(int argc, char **argv)
         printf("Usage: %s <rom file>\n", argv[0]);
         return -1;
     }
-    
+
     rc = gb_init(&gb, argv[1]);
-    
+
     if(rc != 0) {
         printf("Init failed: %d!\n", rc);
         return -2;
     }
-    
-    gb_run(&gb);
-    
+
+    while (gb.run) {
+        gb_tick(&gb);
+    }
+
     return 0;
 }
 

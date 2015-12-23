@@ -16,8 +16,10 @@ typedef struct _gb_t
 
 /* Initialise the gameboy structure */
 int gb_init(gb_t *gb, char *fname);
-/* Run the gameboy until it terminates */
-void gb_run(gb_t *gb);
+/* Run the gameboy one tick */
+void gb_tick(gb_t *gb);
+
+void gb_quit(gb_t *gb);
 
 #endif
 
