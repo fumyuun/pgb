@@ -137,7 +137,16 @@ void gfx_draw_tilemap(gfx_t *gfx) {
                 }
             }
         }
-
     }
+}
+
+void gfx_update_tilemap(gfx_t *gfx) {
+    SDL_Rect viewport;
+    viewport.x = *gfx->scx;
+    viewport.y = *gfx->scy;
+    viewport.h = SCREEN_H;
+    viewport.w = SCREEN_W;
+    SDL_SetRenderDrawColor(gfx->tilemap_renderer, 0xFF, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+    SDL_RenderDrawRect(gfx->tilemap_renderer, &viewport);
     SDL_RenderPresent(gfx->tilemap_renderer);
 }

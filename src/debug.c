@@ -9,9 +9,12 @@ void debug_init(gb_t *gb) {
 }
 void debug_tick() {
     static int i = 0;
-    if (debug.show_tilemap && i++ > 1000) {
-        gfx_draw_tilemap(&debug.gb->gfx);
-        i = 0;
+    if (debug.show_tilemap) {
+        if (i++ > 10000) {
+            gfx_draw_tilemap(&debug.gb->gfx);
+            gfx_update_tilemap(&debug.gb->gfx);
+            i = 0;
+        }
     }
 }
 

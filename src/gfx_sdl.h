@@ -39,6 +39,7 @@ inline void gfx_update(gfx_t *gfx);
 void gfx_quit(gfx_t *gfx);
 
 void gfx_draw_tilemap(gfx_t *gfx);
+void gfx_update_tilemap(gfx_t *gfx);
 
 inline void sdl_putpixel(SDL_Renderer *renderer, int x, int y, Uint32 pixel);
 #endif
