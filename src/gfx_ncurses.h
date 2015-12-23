@@ -31,4 +31,6 @@ void gfx_tick(gfx_t *gfx);
 inline void gfx_update(gfx_t *gfx);
 void gfx_quit(gfx_t *gfx);
 
+void gfx_draw_tilemap(gfx_t *gfx);
+
 #endif

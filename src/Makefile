@@ -1,5 +1,5 @@
-FILES=cpu.c gb.c gfx.c main.c mem.c instr.c
-HEADERS=cpu.h gb.h gfx.h main.h mem.h instr.h
+FILES=cpu.c gb.c gfx.c main.c mem.c instr.c debug.c
+HEADERS=cpu.h gb.h gfx.h main.h mem.h instr.h debug.h
 
 CC=/usr/bin/clang
 INCLUDE_DIRS=-L/opt/local/lib -I/opt/local/include -L/usr/local/lib -I/usr/local/include

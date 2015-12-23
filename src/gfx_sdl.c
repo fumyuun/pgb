@@ -1,4 +1,5 @@
 #include "main.h"
+#include "debug.h"
 
 #define LYSCALER 1
 
@@ -21,6 +22,9 @@ int gfx_init(gfx_t *gfx, mem_t *mem, int *run)
     if(SDL_Init(SDL_INIT_VIDEO) != 0)   return -2;
     gfx->sdl_window = SDL_CreateWindow("pgb", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, 0);
     gfx->sdl_renderer = SDL_CreateRenderer(gfx->sdl_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    gfx->tilemap_window = SDL_CreateWindow("pgb-debug", 0, 0, 255, 255, 0);
+    gfx->tilemap_renderer = SDL_CreateRenderer(gfx->tilemap_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     gfx->black = 0x00;
     gfx->white = 0xFF;
 
@@ -60,8 +64,11 @@ void gfx_tick(gfx_t *gfx)
         }
     }
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            *(gfx->run) = 0;
+        if (event.type == SDL_QUIT || (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE)) {
+            *gfx->run = 0;
+        }
+        if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_d) {
+            debug_toggle_tilemap();
         }
     }
 }
@@ -97,8 +104,6 @@ void gfx_update(gfx_t *gfx)
             gfx->fscounter = 0;
         #endif
         SDL_RenderPresent(gfx->sdl_renderer);
-        //printf("FPS: %lu\n", 1000 / (SDL_GetTicks() - gfx->last_frame));
-        //gfx->last_frame = SDL_GetTicks();
     }
 }
 
@@ -106,4 +111,33 @@ void gfx_quit(gfx_t *gfx)
 {
     SDL_DestroyWindow(gfx->sdl_window);
     SDL_Quit();
+}
+
+void gfx_draw_tilemap(gfx_t *gfx) {
+    int tx, ty, x, y;
+    uint8_t *t;
+    uint8_t pl1, pl2, pl;
+    int mask;
+    for (ty = 0; ty < 32; ++ty) {
+        for (tx = 0; tx < 32; ++tx) {
+            t = gfx->mem->iram + 0x9800 + 32 * ty + tx;
+            for (y = 0; y < 8; ++y) {
+                pl1 = gfx->mem->iram[0x8000 + 16 * *t + 2*y];
+                pl2 = gfx->mem->iram[0x8000 + 16 * *t + 2*y + 1];
+                pl = pl1 | pl2;
+                mask = 0x80;
+                for (x = 0; x < 8; ++x) {
+                    if (pl & mask) {
+                        sdl_putpixel(gfx->tilemap_renderer, tx * 8 + x, ty * 8 + y, gfx->black);
+                    }
+                    else {
+                        sdl_putpixel(gfx->tilemap_renderer, tx * 8 + x, ty * 8 + y, gfx->white);
+                    }
+                    mask >>= 1;
+                }
+            }
+        }
+
+    }
+    SDL_RenderPresent(gfx->tilemap_renderer);
 }

@@ -80,3 +80,7 @@ void gfx_quit(gfx_t *gfx)
 {
     endwin();
 }
+
+void gfx_draw_tilemap(gfx_t *gfx) {
+
+}

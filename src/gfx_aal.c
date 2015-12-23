@@ -90,3 +90,7 @@ void gfx_quit(gfx_t *gfx)
     aa_close(gfx->aal_context);
 
 }
+
+void gfx_draw_tilemap(gfx_t *gfx) {
+
+}

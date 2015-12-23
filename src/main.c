@@ -17,8 +17,11 @@ int main(int argc, char **argv)
         return -2;
     }
 
+    debug_init(&gb);
+
     while (gb.run) {
         gb_tick(&gb);
+        debug_tick();
     }
 
     return 0;
